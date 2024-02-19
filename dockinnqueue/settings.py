@@ -27,9 +27,9 @@ SECRET_KEY = 'django-insecure-6!&u@(!@oiy8b!%82#cnl-6go-*=*_eo2g$8(+-a)fiv-y1vl6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.10.152','localhost','dockinnqueue.balaydalakay.com']
+ALLOWED_HOSTS = ['localhost']
 CSRF_TRUSTED_ORIGINS = [
-    'https://dockinnqueue.balaydalakay.com'
+    
 ]
 
 
@@ -37,7 +37,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'mssql',
+    # 'mssql',
     'xhtml2pdf',
     'qrcode',
     'queues.apps.QueuesConfig',
