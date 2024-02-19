@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
+
+    <div class="text-center text-sm text-gray-500 sm:text-left">
+        <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
+            <div class="flex items-center">
+                <img src="{% static 'img/aklclogo.png' %}" alt="" width="220px" >   
+     
+                <h3>Welcome to <strong>Dockin Queue</strong></h3>
+                <h5>Please choose one of the following</h5>
+                <p></p>
+                {% include 'messages/alertqueue.html' %}
+
+            </div>
+        </div>
+        <p></p>
+       
+
+        <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
+            <div class="container" style="padding:10px 10px;">
+                <div class="card" style="padding: 10px;">
+                    <a style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#hardware_modal">
+                        <div class="p-6">
+                            <div class="center-text">
+                                <i class="fa fa-laptop" style="font-size: 32px;"></i>
+                                <h3>Hardware Issue</h3>
+                            </div>
+
+                        <div class="ml-12">
+                            <div class="mt-2 text-sm">
+                                <p style="text-align: justify;">
+                                    Use this option if you're having an issue with ICT related hardware which includes but is not limited to PCs, laptops, monitors, printers, mobile handsets, smartphones, tablets, audio-visual equipment and ICT peripherals. Please include as much information as possible about the fault and any errors you may be receiving.
+                                </p>
+                            </div>
+                        </div>
+                        </div>
+                    </a>
+                </div>
+               
+                <div class="card" style="padding: 10px;">
+                    <a style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#software_modal">
+                <div class="p-6">
+                    <div class="flex items-center">
+                        <i class="fa fa-cloud" style="font-size: 32px;"></i>
+                        <h3>Software Issue</h3>
+                    </div>
+
+                    <div class="ml-12">
+                    <div class="mt-2 text-sm">
+                            <p style="text-align: justify;">
+                                Use this option if you're having an issue with any software, application or website. Please include as much information as possible including screenshot attachments if relevant.</p>
+                                <p style="text-align: justify;">
+                                Please note if you have a SAP issue you can raise a specific request <a href="https://aklc.service-now.com/awhina?id=sc_cat_item&sys_id=1e34ef214f36530065cb46501310c79f" target=_blank>here</a>.</p>
+                        </div>
+                    </div>
+                </div>
+                </a>
+                </div>
+             
+                <div class="card" style="padding: 10px;">
+                    <a style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#phone_modal">
+                <div class="p-6">
+                    <div class="flex items-center">
+                        <i class="fa fa-phone" style="font-size: 32px;"></i>
+                        <h3>Phone Issue</h3>
+                    </div>
+
+                    <div class="ml-12">
+                    <div class="mt-2 text-sm">
+                        <p style="text-align: justify;">
+                            Use this option if you're having an issue with any issue with you mobile phone like changing mobile phone, request sim swap, request data plan, request for new softphone and othe phone related queries.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                </a>
+                </div>
+            
+                <div class="card" style="padding: 10px;">
+                    <a style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#other_modal">
+                <div class="p-6">
+                    <div class="flex items-center">
+                        <i class="fa fa-user" style="font-size: 32px;"></i>
+                        <h3>
+                                Account Related Issues
+                        </h3>
+                    </div>
+
+                    <div class="ml-12">
+                    <div class="mt-2 text-sm">
+                        <p style="text-align: justify;">
+                            Use this option for any acount related issues.
+                                e.q Password reset, account locked, account activation
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                </a>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
+            <div class="text-center text-sm text-gray-500 sm:text-left">
+                <div class="flex items-center">
+                    
+                    <i class="fa fa-phone"></i>
+
+
+                    <a style="text-decoration: none; color: black;" href="#" class="ml-1 underline">
+                        Service Desk: 093-55-55-55
+                    </a>
+                </div>
+            </div>
+
+            <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+                Copyright &copy; AucklandCouncil 2024 | <a href="{% url 'login' %}">LogIn</a> | <a href="{% url 'register' %}">Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include '_partials/modalqueue.html' %}
+
+{% endblock %}

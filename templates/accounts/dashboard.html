@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+    <div class="container">
+      <a href="{% url 'dashboard' %}" class="navbar-brand">Dockinn Queue Admin</a>
+      <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav">
+          <li class="nav-item px-2">
+            <a href="{% url 'dashboard' %}" class="nav-link active">Dashboard</a>
+          </li>
+          <!-- <li class="nav-item px-2">
+            <a href="#" class="nav-link">Print Report</a>
+          </li> -->
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+            <li 
+              {% if 'dashboard' in request.path %}
+                class="nav-item active mr-3"
+              {% else %}
+                class="nav-item mr-3"
+              {% endif %}
+              >
+              <a href="{% url 'dashboard' %}" class="nav-link">
+                <i class="fas fa-user"></i> Welcome {{ user.username }}
+              </a>
+              
+            </li>
+            <li class="nav-item">
+              <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
+                <i class="fas fa-user-times"></i> Logout
+              </a>
+              <form action="{% url 'logout' %}" method="POST" id="logout">
+                {% csrf_token %}
+                <input type="hidden">
+              </form>
+            </li>
+            {% endif %}
+        </ul>
+      </div>
+    </div>
+</nav>
+
+  <!-- ACTIONS -->
+  <section id="actions" class="py-4 mb-4 bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+            <div class="card text-center bg-primary text-white mb-3">
+                <div class="card-body">
+                  <h3>Hardware</h3>
+                  <h4 class="display-6">
+                    <i class="fas fa-laptop"></i> 
+                  </h4>
+                  <a href="" class="btn btn-light btn-sm">Issue: {{hardwareCount}}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center bg-success text-white mb-3">
+                <div class="card-body">
+                  <h3>Software</h3>
+                  <h4 class="display-6">
+                    <i class="fas fa-cloud"></i>
+                  </h4>
+                  <a href="" class="btn btn-light btn-sm">Issue: {{softwareCount}}</a>
+                </div>
+              </div>            
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center bg-warning text-white mb-3">
+                <div class="card-body">
+                  <h3>Phone</h3>
+                  <h4 class="display-6">
+                    <i class="fas fa-phone"></i>
+                  </h4>
+                  <a href="" class="btn btn-light btn-sm">Issue: {{phoneCount}}</a>
+                </div>
+              </div>            
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center bg-dark text-white mb-3">
+                <div class="card-body">
+                  <h3>Account</h3>
+                  <h4 class="display-6">
+                    <i class="fas fa-users"></i>
+                  </h4>
+                  <a href="" class="btn btn-light btn-sm">Issue: {{accountCount}}</a>
+                </div>
+              </div>            
+        </div>
+        
+
+          
+
+          
+
+          
+        <!-- <div class="col-md-3">
+          <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addPostModal">
+            <i class="fas fa-plus"></i> Add Post
+          </a>
+        </div>
+        <div class="col-md-3">
+          <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#addCategoryModal">
+            <i class="fas fa-plus"></i> Add Category
+          </a>
+        </div>
+        <div class="col-md-3">
+          <a href="#" class="btn btn-warning btn-block" data-toggle="modal" data-target="#addUserModal">
+            <i class="fas fa-plus"></i> Add User
+          </a>
+        </div> -->
+      </div>
+    </div>
+  </section>
+
+  <!-- POSTS -->
+
+  {% include 'messages/alert.html' %}
+  <section style="padding: 0 15px;">
+    <div class="row">
+      <div class="col-md-6">
+            <form action="{% url 'generate_pdf' %}" method="GET" class="md-form md-outline input-with-post-icon datepicker" inline="true" target=_blank style="float: left;">
+                <label style="display:block">Pick a Date Range:</label>
+                <input style="border-radius:5px; padding: 3px 5px; width: 190px" placeholder="Select Start Date" type="date" id="startDate" name="startDate" required>
+                <input style="border-radius:5px; padding: 3px 5px; width: 190px" placeholder="Select End Date" type="date" id="endDate" name="endDate" required>
+                <input type="submit" style="margin: 10px 0;" class="btn btn-rounded btn-info" value="Print Report">
+            </form>
+        </div>
+    </div>  
+  </div>
+  </section>
+ 
+  <section id="posts">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <h4>Dockinn Queue</h4>
+            </div>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Queue #</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Queue Number</th>
+                  <th>Type</th>
+                  <th>Comment</th>
+                  <th>Technician</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for queueList in queueLists %}
+
+                <tr>
+                  <td>{{queueList.queue_id}}</td>
+                  <td>{{queueList.name}}</td>
+                  <td>{{queueList.description}}</td>
+                  <td>{{queueList.queue_id}}</td>
+                  <td>{{queueList.type}}</td>
+                  <td>{{queueList.comment}}</td>
+                  <td>{{queueList.technician}}</td>
+                  <td>{{queueList.status}}</td>
+
+                  <td>
+                    <!-- <a class="btn btn-secondary" style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#update_modal"
+                        id="updateTicket" 
+                    > -->
+
+                    <a href="{% url 'updateticket' queueList.id %}" class="btn btn-secondary">
+                      <i class="fas fa-angle-double-right"></i> Get Ticket
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include '_partials/modalupdatequeue.html' %}
+{% endblock %}
