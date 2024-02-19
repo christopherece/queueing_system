@@ -10,7 +10,7 @@ class Queue(models.Model):
         ('hardware','Hardware Issue'),
         ('software','Software Issue'),
         ('phone','Phone Issue'),
-        ('other','Account Issue'),
+        ('account','Account Issue'),
 
     )
 

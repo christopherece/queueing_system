@@ -153,18 +153,19 @@
                 </div>
               </div> <!-- End Col Md-6 -->
 
-              <div class="col-md-6" >
+              <div class="col-md-6">
                 <div class="form-group">
-                  <h5>Technician <span class="text-danger">*</span></h5>
-                  <div class="controls">
-                    <select name="technician"  required="" class="form-control">
-                      {% for user in usersList %}
-                      <option value="{{user.first_name}}" selected=>{{user.first_name}}</option>
-                      {% endfor %}
-                    </select>
-                  </div>	 
+                    <h5>Technician <span class="text-danger">*</span></h5>
+                    <div class="controls">
+                        <select name="technician" required="" class="form-control">
+                            {% for user in usersList %}
+                                <option value="{{ user.first_name }}" {% if user == request.user %} selected {% endif %}>{{ user.first_name }} {{ user.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>	 
                 </div>
-              </div> <!-- End Col Md-6 -->
+            </div> <!-- End Col Md-6 -->
+            
 
               <div class="col-md-6">
                 <input type="submit" class="btn btn-rounded btn-info mb-5" value="Update">
