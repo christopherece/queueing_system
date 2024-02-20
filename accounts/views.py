@@ -74,8 +74,12 @@ def dashboard(request):
     accountCount = Queue.objects.filter(type__contains='other').count()
 
     # queueLists = Queue.objects.filter(technician__contains = request.user.username).values() | Queue.objects.filter(technician__startswith = 'Not Assigned').values()
-    queueLists = Queue.objects.filter(Q(technician__icontains=request.user.username) | Q(technician__istartswith='Not Assigned')).values()
-
+    queueLists = Queue.objects.filter(
+        Q(technician__icontains=request.user.username) | 
+        Q(technician__istartswith='Not Assigned') | 
+        Q(status='In Progress') |
+        Q(status='Done')
+    ).values()
     context = {
         'queueLists': queueLists,
         'hardwareCount':hardwareCount,
