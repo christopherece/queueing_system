@@ -27,9 +27,9 @@ SECRET_KEY = 'django-insecure-6!&u@(!@oiy8b!%82#cnl-6go-*=*_eo2g$8(+-a)fiv-y1vl6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost','192.168.10.250','easyqueue.topitsolutions.co.nz','dockinnqueue.balaydalakay.com','dockinnqueue.topitsolutions.co.nz']
 CSRF_TRUSTED_ORIGINS = [
-    
+    'https://easyqueue.topitsolutions.co.nz','https://easyqueue.topitsolutions.co.nz','https://dockinnqueue.topitsolutions.co.nz','http://dockinnqueue.topitsolutions.co.nz'
 ]
 
 
