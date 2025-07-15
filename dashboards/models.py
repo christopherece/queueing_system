@@ -37,8 +37,9 @@ class Dashboard(models.Model):
             draw = ImageDraw.Draw(canvas)
             canvas.paste(qrcode_img, (0, 0))
             
-            # Generate filename
-            fname = f'qr_code-{self.name}.png'
+            # Generate filename - sanitize name to avoid path issues
+            name = self.name.replace('/', '-').replace('\\', '-').replace(':', '-')
+            fname = f'qr_code-{name}.png'
             
             # Save to buffer
             buffer = BytesIO()
@@ -51,7 +52,9 @@ class Dashboard(models.Model):
             canvas.close()
             
         except Exception as e:
-            print(f"Error generating QR code: {str(e)}")
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Error generating QR code: {str(e)}")
             # If QR code generation fails, still save the model
             pass
         
