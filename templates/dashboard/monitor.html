@@ -12,67 +12,352 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
     crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    :root {
+      --primary-color: #2a5298;
+      --secondary-color: #1e3c72;
+      --accent-color: #4a90e2;
+      --text-color: #333;
+      --light-bg: rgba(255, 255, 255, 0.95);
+      --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.1);
+      --gradient-start: #f5f7fa;
+      --gradient-end: #c3cfe2;
+      --bg-overlay: rgba(255, 255, 255, 0.95);
+    }
 
+    body {
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      background-size: cover;
+      background-repeat: no-repeat;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #page-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .header-section img {
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+
+    .header-section h1 {
+      color: var(--primary-color);
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-section strong {
+      color: var(--accent-color);
+    }
+
+    .main-card {
+      width: 100%;
+      max-width: 1200px;
+      background: white;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .main-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card {
+      background: transparent;
+      border: none;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    .queue-section {
+      padding: 2rem;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .queue-section:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .queue-section h4 {
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .table-responsive {
+      margin-bottom: 0;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .table {
+      background: white;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .table thead th {
+      background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 1.25rem;
+      font-size: 1rem;
+    }
+
+    .table tbody tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(var(--primary-color), 0.05);
+      transform: translateX(5px);
+      transition: all 0.3s ease;
+    }
+
+    .badge {
+      padding: 0.75em 1.5em;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .badge:hover {
+      transform: scale(1.05);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .current-queue {
+      background: white;
+      padding: 3rem;
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+      margin: 2rem auto;
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+    }
+
+    .current-queue::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border-radius: 1.5rem;
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .serving-number {
+      margin: 2rem 0;
+      position: relative;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: 1rem;
+    }
+
+    .serving-number h2 {
+      color: white;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .serving-number h1 {
+      font-size: 4rem;
+      color: white;
+      font-weight: 700;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .status-badge {
+      margin-top: 2rem;
+    }
+
+    .status-badge .badge {
+      background: var(--accent-color);
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @keyframes numberPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .number-animation {
+      animation: numberPulse 2s infinite;
+      color: white;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-card {
+        margin: 1rem;
+      }
+
+      .current-queue {
+        padding: 2rem;
+        margin: 1.5rem auto;
+      }
+
+      .serving-number h1 {
+        font-size: 3rem;
+      }
+
+      .table thead th {
+        padding: 1rem;
+      }
+
+      .queue-section h4 {
+        font-size: 1.25rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .header-section h1 {
+        font-size: 2rem;
+      }
+
+      .current-queue {
+        padding: 1.5rem;
+      }
+
+      .serving-number {
+        padding: 1.5rem;
+      }
+
+      .serving-number h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
 
   <title>EasyQueue | TopITSolutions</title>
 </head>
 
 <body class="bg wrapper">
-<div id="page-container">
-  <div class="text-center">          
-    <img src="{% static 'img/topit.png' %}" alt="" width="320px" >        
-    <h1>Welcome to <strong>EasyQueue</strong> by TopITSolutions</h1>  
-  </div>
-  <p></p>
-
-  <!-- POSTS -->
-  <section id="posts" style="padding: 0 50px;">
-      <div class="row">
-        <div class="col-md-8">
-          <div class="card">
-            <!-- <div class="card-header" >
-              <h4>On-Queue List</h4>
-            </div> -->
-            <table class="table table-striped" >
-              <thead class="thead-dark">
-                <tr>
-                  <th width="10%">Queue #</th>
-                  <!-- <th>Awhina No</th> -->
-                  <th>Type</th>
-                  <th>Description</th>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
+  <div id="page-container">
+    <div class="text-center">          
+      <img src="{% static 'img/it_logo.png' %}" alt="" width="" >        
+      <h1>Welcome to <strong>EasyQueue</strong> </h1>  
+  <section id="posts" class="main-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8 queue-section">
+            <h4 class="mb-4">Queue List</h4>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th width="10%" class="text-center">Queue #</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {% for queueList in queueLists %}
-                  <td>{{queueList.queue_id}}</td>
-                  <!-- <td>{{queueList.ritm}}</td> -->
-                  <td>{{queueList.type}}</td>
-                  <td>{{queueList.description}}</td>
-                  <!-- <td>
-                    <a href="details.html" class="btn btn-secondary">
-                      <i class="fas fa-angle-double-right"></i> Details
-                    </a>
-                  </td> -->
-                </tr>
-                {% endfor %}
-                
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card text-center text-white mb-3" style="background-color: #02314b">
-            <div class="card-body">
-              <h2>Serving No:</h2>
-              <h1 class="display-1">
-                {{queue_id }}
-              </h1>
-              
+                  <tr>
+                    <td class="text-center align-middle">
+                      <span class="badge bg-primary">{{ queueList.queue_id }}</span>
+                    </td>
+                    <td class="align-middle">
+                      <span class="badge bg-info text-white">{{ queueList.type }}</span>
+                    </td>
+                    <td class="align-middle">
+                      <p class="mb-0">{{ queueList.description }}</p>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
           </div>
+
+          <div class="col-md-4 queue-section">
+            <div class="current-queue">
+              <h4 class="mb-3">Current Queue</h4>
+              <div class="serving-number">
+                <h2 class="text-primary mb-1">Serving No:</h2>
+                <h1 class="display-1 mb-0">
+                  <span class="number-animation">{{ queue_id }}</span>
+                </h1>
+                
+              <div class="status-badge">
+                <span class="badge">
+                  <i class="fas fa-check-circle me-2"></i>
+                  Active
+                </span>
+              </div>
+              <div class="mt-2" style="color: #fff; font-size: 0.9rem;">
+                <span id="currentDateTime"></span>
+              </div>
+              <script>
+                function updateDateTime() {
+                  const now = new Date();
+                  const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                  };
+                  const formattedDateTime = now.toLocaleDateString('en-NZ', options);
+                  document.getElementById('currentDateTime').textContent = formattedDateTime;
+                }
+
+                // Update immediately
+                updateDateTime();
+                // Update every second
+                setInterval(updateDateTime, 1000);
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
           <!-- <div class="card text-center bg-success text-white mb-3">
             <div class="card-body">
@@ -130,5 +415,3 @@
 </body>
 
 </html>
-
-

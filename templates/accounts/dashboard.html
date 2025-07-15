@@ -13,9 +13,6 @@
           <li class="nav-item px-2">
             <a href="{% url 'dashboard' %}" class="nav-link active">Dashboard</a>
           </li>
-          <!-- <li class="nav-item px-2">
-            <a href="#" class="nav-link">Print Report</a>
-          </li> -->
         </ul>
 
         <ul class="navbar-nav ml-auto">
@@ -27,10 +24,16 @@
                 class="nav-item mr-3"
               {% endif %}
               >
-              <a href="{% url 'dashboard' %}" class="nav-link">
-                <i class="fas fa-user"></i> Welcome {{ user.username }}
-              </a>
-              
+              <div class="dropdown">
+                <a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                  <i class="fas fa-user"></i> Welcome {{ user.username }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                  <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                </div>
+              </div>
             </li>
             <li class="nav-item">
               <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
@@ -51,6 +54,9 @@
   <section id="actions" class="py-4 mb-4 bg-light">
     <div class="container">
       <div class="row">
+        <div class="col-md-12 mb-4">
+          <!-- Empty section for future dashboard content -->
+        </div>
         <div class="col-md-3">
             <div class="card text-center bg-primary text-white mb-3">
                 <div class="card-body">
@@ -146,6 +152,42 @@
       <div class="row">
         <div class="col">
           <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-filter"></i> Filter Tickets</h5>
+            </div>
+            <div class="card-body">
+              <form method="GET" action="{% url 'dashboard' %}" class="row g-3">
+                <div class="col-md-4">
+                  <select class="form-select" name="technician" value="{{ technician }}">
+                    <option value="">Filter by Technician</option>
+                    <option value="{{ user.username }}">My Tickets</option>
+                    <option value="Not Assigned">Unassigned</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <select class="form-select" name="status" value="{{ status }}">
+                    <option value="">Filter by Status</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <select class="form-select" name="type" value="{{ type }}">
+                    <option value="">Filter by Type</option>
+                    <option value="hardware">Hardware</option>
+                    <option value="software">Software</option>
+                    <option value="phone">Phone</option>
+                    <option value="other">Account</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="card mt-4">
             <div class="card-header">
               <h4>Dockinn Queue</h4>
             </div>
@@ -178,10 +220,6 @@
                   <td>{{queueList.status}}</td>
 
                   <td>
-                    <!-- <a class="btn btn-secondary" style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#update_modal"
-                        id="updateTicket" 
-                    > -->
-
                     <a href="{% url 'updateticket' queueList.id %}" class="btn btn-secondary">
                       <i class="fas fa-angle-double-right"></i> Get Ticket
                     </a>
@@ -192,7 +230,6 @@
               </tbody>
             </table>
           </div>
-        </div>
       </div>
     </div>
   </section>

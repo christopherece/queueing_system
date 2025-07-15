@@ -16,12 +16,13 @@ class Dashboard(models.Model):
 
     def save(self, *args, **kwargs):
         qrcode_img = qrcode.make(self.name)
+        qrcode_img = qrcode_img.resize((370, 370))
         canvas = Image.new('RGB', (370, 370), 'white')
         draw = ImageDraw.Draw(canvas)
-        canvas.paste(qrcode_img)
+        canvas.paste(qrcode_img, (0, 0))
         fname = f'qr_code-{self.name}.png'
         buffer = BytesIO()
-        canvas.save(buffer,'PNG')
+        canvas.save(buffer, 'PNG')
         self.qr_code.save(fname, File(buffer), save=False)
         canvas.close()
         super().save(*args, **kwargs)

@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-6!&u@(!@oiy8b!%82#cnl-6go-*=*_eo2g$8(+-a)fiv-y1vl6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','192.168.10.250','easyqueue.topitsolutions.co.nz','dockinnqueue.balaydalakay.com','dockinnqueue.topitsolutions.co.nz']
+ALLOWED_HOSTS = ['localhost','192.168.10.66','easyqueue.topitsolutions.co.nz','dockinnqueue.balaydalakay.com','dockinnqueue.topitsolutions.co.nz']
 CSRF_TRUSTED_ORIGINS = [
     'https://easyqueue.topitsolutions.co.nz','https://easyqueue.topitsolutions.co.nz','https://dockinnqueue.topitsolutions.co.nz','http://dockinnqueue.topitsolutions.co.nz'
 ]
@@ -86,15 +86,16 @@ WSGI_APPLICATION = 'dockinnqueue.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'dockinndb',
-    #     'USER': 'postgres',
-    #     'PASSWORD': '!pass1234',
-    #     'HOST':'192.168.10.225'
-    # }
-
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'queueing_tbl',
+        'USER': 'postgres',
+        'PASSWORD': 'Mmsucit1502',
+        'HOST':'192.168.10.42',
+        'PORT': '5432',
+    },
+
+    'default1': {
         'ENGINE': 'django.db.backends.sqlite3',  # Use 'django.db.backends.sqlite3' for SQLite, other engines are available too
         'NAME': BASE_DIR / "db.sqlite3",       # Path to your SQLite database file
     }

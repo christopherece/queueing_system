@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+    <div class="container">
+        <a href="{% url 'dashboard' %}" class="navbar-brand">EasyQueue | Admin</a>
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav">
+                <li class="nav-item px-2">
+                    <a href="{% url 'dashboard' %}" class="nav-link active">Dashboard</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i> Welcome {{ user.username }}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="javascript:{document.getElementById('logout').submit()}" class="nav-link">
+                            <i class="fas fa-user-times"></i> Logout
+                        </a>
+                        <form action="{% url 'logout' %}" method="POST" id="logout">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Update Profile</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Profile Picture Section -->
+                        <div class="text-center mb-4">
+                            <img id="profile-preview" src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}" 
+                                 class="rounded-circle mb-3" 
+                                 style="width: 150px; height: 150px; object-fit: cover; border: 2px solid #dee2e6;" 
+                                 alt="Profile Picture">
+                            <div class="form-group mb-3">
+                                <label for="{{ profile_form.profile_picture.id_for_label }}" class="form-label">Upload Profile Picture</label>
+                                <input type="file" class="form-control-file" name="{{ profile_form.profile_picture.name }}" id="{{ profile_form.profile_picture.id_for_label }}" accept="image/*" onchange="previewImage(this)">
+                            </div>
+                        </div>
+
+                        <script>
+                            function previewImage(input) {
+                                if (input.files && input.files[0]) {
+                                    var reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        document.getElementById('profile-preview').src = e.target.result;
+                                    }
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            }
+                        </script>
+
+                        <!-- Form Grid -->
+                        <div class="row">
+                            <!-- Left Column -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.phone_number.id_for_label }}" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" name="{{ profile_form.phone_number.name }}" id="{{ profile_form.phone_number.id_for_label }}" value="{{ profile_form.phone_number.value|default:"" }}" required="{{ profile_form.phone_number.required|yesno:"required,notrequired" }}">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.date_of_birth.id_for_label }}" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" name="{{ profile_form.date_of_birth.name }}" id="{{ profile_form.date_of_birth.id_for_label }}" value="{{ profile_form.date_of_birth.value|date:'Y-m-d'|default:"" }}" required="{{ profile_form.date_of_birth.required|yesno:"required,notrequired" }}">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.role.id_for_label }}" class="form-label">Role</label>
+                                    <select class="form-select" name="{{ profile_form.role.name }}" id="{{ profile_form.role.id_for_label }}" required="{{ profile_form.role.required|yesno:"required,notrequired" }}">
+                                        {% for value, text in profile_form.role.field.choices %}
+                                            <option value="{{ value }}" {% if profile_form.role.value == value %}selected{% endif %}>{{ text }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.address.id_for_label }}" class="form-label">Address</label>
+                                    <textarea class="form-control" name="{{ profile_form.address.name }}" id="{{ profile_form.address.id_for_label }}" rows="3" required="{{ profile_form.address.required|yesno:"required,notrequired" }}">{{ profile_form.address.value|default:"" }}</textarea>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="{{ profile_form.department.id_for_label }}" class="form-label">Department</label>
+                                    <select class="form-select" name="{{ profile_form.department.name }}" id="{{ profile_form.department.id_for_label }}" required="{{ profile_form.department.required|yesno:"required,notrequired" }}">
+                                        {% for value, text in profile_form.department.field.choices %}
+                                            <option value="{{ value }}" {% if profile_form.department.value == value %}selected{% endif %}>{{ text }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="{{ profile_form.is_admin.name }}" id="{{ profile_form.is_admin.id_for_label }}" {% if profile_form.is_admin.value %}checked{% endif %}>
+                                        <label class="form-check-label" for="{{ profile_form.is_admin.id_for_label }}">Is Admin</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="{{ profile_form.is_staff.name }}" id="{{ profile_form.is_staff.id_for_label }}" {% if profile_form.is_staff.value %}checked{% endif %}>
+                                        <label class="form-check-label" for="{{ profile_form.is_staff.id_for_label }}">Is Staff</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary px-4">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

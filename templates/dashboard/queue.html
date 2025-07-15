@@ -1,123 +1,210 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
+<style>
+    .welcome-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
 
-<div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
+    .welcome-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, #2a5298, #1e3c72);
+        opacity: 0.1;
+        z-index: -1;
+        border-radius: 1.5rem;
+    }
 
-    <div class="text-center text-sm text-gray-500 sm:text-left">
-        <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
-            <div class="flex items-center">
-                <img src="{% static 'img/topit.png' %}" alt="" width="220px" >   
-     
-                <h3>Welcome to <strong>EasyQueue</strong> by TopITSolutions</h3>
-                <h5>Please choose one of the following</h5>
-                <p></p>
-                {% include 'messages/alertqueue.html' %}
+    .welcome-card h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2a5298;
+        margin-bottom: 1rem;
+    }
 
-            </div>
-        </div>
-        <p></p>
-       
+    .welcome-card h1 strong {
+        color: #4a90e2;
+    }
 
-        <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-            <div class="container" style="padding:10px 10px;">
-                <div class="card" style="padding: 10px;">
-                    <a style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#hardware_modal">
-                        <div class="p-6">
-                            <div class="center-text">
-                                <i class="fa fa-laptop" style="font-size: 32px;"></i>
-                                <h3>Hardware Issue</h3>
-                            </div>
+    .welcome-card h2 {
+        font-size: 1.25rem;
+        color: #666;
+        margin-bottom: 2rem;
+    }
 
-                        <div class="ml-12">
-                            <div class="mt-2 text-sm">
-                                <p style="text-align: justify;">
-                                    Use this option if you're having an issue with ICT related hardware which includes but is not limited to PCs, laptops, monitors, printers, mobile handsets, smartphones, tablets, audio-visual equipment and ICT peripherals. Please include as much information as possible about the fault and any errors you may be receiving.
-                                </p>
-                            </div>
-                        </div>
-                        </div>
-                    </a>
-                </div>
-               
-                <div class="card" style="padding: 10px;">
-                    <a style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#software_modal">
-                <div class="p-6">
-                    <div class="flex items-center">
-                        <i class="fa fa-cloud" style="font-size: 32px;"></i>
-                        <h3>Software Issue</h3>
-                    </div>
+    .welcome-card img.logo {
+        max-width: 300px;
+        height: auto;
+        margin-bottom: 2rem;
+    }
 
-                    <div class="ml-12">
-                    <div class="mt-2 text-sm">
-                            <p style="text-align: justify;">
-                                Use this option if you're having an issue with any software, application or website. Please include as much information as possible including screenshot attachments if relevant.</p>
-                                <p style="text-align: justify;">
-                                Please note if you have a SAP issue you can raise a specific request <a href="https://aklc.service-now.com/awhina?id=sc_cat_item&sys_id=1e34ef214f36530065cb46501310c79f" target=_blank>here</a>.</p>
-                        </div>
-                    </div>
-                </div>
-                </a>
-                </div>
-             
-                <div class="card" style="padding: 10px;">
-                    <a style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#phone_modal">
-                <div class="p-6">
-                    <div class="flex items-center">
-                        <i class="fa fa-phone" style="font-size: 32px;"></i>
-                        <h3>Phone Issue</h3>
-                    </div>
+    .service-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin: 0.8rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+        max-height: 220px;
+        display: flex;
+        flex-direction: column;
+    }
 
-                    <div class="ml-12">
-                    <div class="mt-2 text-sm">
-                        <p style="text-align: justify;">
-                            Use this option if you're having an issue with any issue with you mobile phone like changing mobile phone, request sim swap, request data plan, request for new softphone and othe phone related queries.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                </a>
-                </div>
+    .service-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .service-card i {
+        font-size: 2.4rem;
+        color: #4a90e2;
+        margin-bottom: 0.8rem;
+    }
+
+    .service-card h3 {
+        font-size: 1.3rem;
+        color: #2a5298;
+        margin-bottom: 0.8rem;
+    }
+
+    .service-card p {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        flex: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .service-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .welcome-card {
+            padding: 1.5rem;
+        }
+
+        .welcome-card h1 {
+            font-size: 2rem;
+        }
+
+        .welcome-card h2 {
+            font-size: 1.2rem;
+        }
+
+        .service-grid {
+            grid-template-columns: 1fr;
+            padding: 1rem;
+        }
+
+        .service-card {
+            padding: 1.2rem;
+            margin: 0.8rem;
+            max-height: 200px;
+        }
+
+        .service-card i {
+            font-size: 2.5rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+        }
+
+        .service-card p {
+            font-size: 1rem;
+            line-height: 1.5;
+            -webkit-line-clamp: 3;
+        }
+    }
+</style>
+
+<div class="flex items-center justify-center min-h-screen py-4 sm:py-0 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="welcome-card">
+            <img src="{% static 'img/it_logo.png' %}" alt="" class="logo">
+            <h1>Welcome to <strong>EasyQueue</strong></h1>
+            <h2>Please choose one of the following services</h2>
             
-                <div class="card" style="padding: 10px;">
-                    <a style="text-decoration: none; color: black;" href="#"  data-toggle="modal" data-target="#other_modal">
-                <div class="p-6">
-                    <div class="flex items-center">
-                        <i class="fa fa-user" style="font-size: 32px;"></i>
-                        <h3>
-                                Account Related Issues
-                        </h3>
-                    </div>
+            {% include 'messages/alertqueue.html' %}
 
-                    <div class="ml-12">
-                    <div class="mt-2 text-sm">
-                        <p style="text-align: justify;">
-                            Use this option for any acount related issues.
-                                e.q Password reset, account locked, account activation
+            <div class="service-grid">
+                <div class="service-card">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#hardware_modal" style="text-decoration: none; color: inherit;">
+                        <div>
+                            <i class="fas fa-laptop"></i>
+                            <h3>Hardware Issue</h3>
+                            <p>
+                                Use this option if you're having an issue with ICT related hardware which includes but is not limited to PCs, laptops, monitors, printers, mobile handsets, smartphones, tablets, audio-visual equipment and ICT peripherals. Please include as much information as possible about the fault and any errors you may be receiving.
                             </p>
                         </div>
-                    </div>
+                    </a>
                 </div>
-                </a>
+
+                <div class="service-card">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#software_modal" style="text-decoration: none; color: inherit;">
+                        <div>
+                            <i class="fas fa-cloud"></i>
+                            <h3>Software Issue</h3>
+                            <p>
+                                Use this option if you're having an issue with any software, application or website. Please include as much information as possible including screenshot attachments if relevant.
+                            </p>
+                            
+                        </div>
+                    </a>
                 </div>
-                
-            </div>
-        </div>
 
-        <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
-            <div class="text-center text-sm text-gray-500 sm:text-left">
-                <div class="flex items-center">
-                    
-                    <i class="fa fa-phone"></i>
+                <div class="service-card">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#phone_modal" style="text-decoration: none; color: inherit;">
+                        <div>
+                            <i class="fas fa-phone"></i>
+                            <h3>Phone Issue</h3>
+                            <p>
+                                Use this option if you're having an issue with any mobile phone like changing mobile phone, requesting SIM swap, data plan, new softphone, or other phone-related queries.
+                            </p>
+                        </div>
+                    </a>
+                </div>
 
-
-                    <a style="text-decoration: none; color: black;" href="#" class="ml-1 underline">
-                        Service Desk: 093-44-55-66
+                <div class="service-card">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#other_modal" style="text-decoration: none; color: inherit;">
+                        <div>
+                            <i class="fas fa-user"></i>
+                            <h3>Account Related Issues</h3>
+                            <p>
+                                Use this option for any account-related issues such as password reset, account lockout, or account activation.
+                            </p>
+                        </div>
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
-            <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+<div class="flex justify-center mt-4 sm:items-center sm:justify-between">
+    <div class="text-center text-sm text-gray-500 sm:text-left">
+        <div class="flex items-center">
+            <div class="ml-4 text-center text-sm text-gray-500">
                 Copyright &copy; TopITSolutions 2025 | <a href="{% url 'login' %}">LogIn</a> | <a href="{% url 'register' %}">Register</a>
             </div>
         </div>

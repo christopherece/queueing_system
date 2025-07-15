@@ -5,40 +5,22 @@ from django.contrib.auth.models import User
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from .models import UserProfile
+from .forms import UserRegistrationForm, UserProfileForm
 
 
 # Create your views here.
 def register(request):
     if request.method == 'POST':
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        password2 = request.POST['password2']
-
-        if password == password2:
-            if User.objects.filter(username=username).exists():
-                messages.error(request, 'Username is already taken')
-                return redirect('register')
-            else:
-                if User.objects.filter(email=email).exists():
-                    messages.error(request, 'Email is already registered')
-                    return redirect('login')
-                else:
-                    user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-                    user.save()
-                    #Login After
-                    auth.login(request, user)
-                    messages.success(request, 'You are now registered')
-                    return redirect('dashboard')
-
-        else:
-            messages.error(request, 'Password did not match, Try again')
-            return redirect('register')
-
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            auth.login(request, user)
+            messages.success(request, 'Registration successful! Please complete your profile.')
+            return redirect('profile')
     else:
-        return render(request, 'accounts/register.html')
+        form = UserRegistrationForm()
+    return render(request, 'accounts/register.html', {'form': form})
 
 
 def login(request):
@@ -73,20 +55,60 @@ def dashboard(request):
     phoneCount = Queue.objects.filter(type__contains='phone').count()
     accountCount = Queue.objects.filter(type__contains='other').count()
 
-    # queueLists = Queue.objects.filter(technician__contains = request.user.username).values() | Queue.objects.filter(technician__startswith = 'Not Assigned').values()
-    queueLists = Queue.objects.filter(
-        Q(technician__icontains=request.user.username) | 
+    # Get filter parameters from request
+    technician = request.GET.get('technician', '')
+    status = request.GET.get('status', '')
+    type_filter = request.GET.get('type', '')
+
+    # Build base query
+    base_query = (
         Q(technician__istartswith='Not Assigned') | 
         Q(status='In Progress') |
         Q(status='Done')
-    ).values()
+    )
+
+    # Special handling for "My Tickets" filter
+    if technician == request.user.username or technician == request.user.first_name:
+        base_query &= Q(technician__icontains=request.user.first_name)
+    elif technician:  # For other technician filters
+        base_query &= Q(technician__icontains=technician)
+
+    # Add other filters if provided
+    if status:
+        base_query &= Q(status__icontains=status)
+    if type_filter:
+        base_query &= Q(type__icontains=type_filter)
+
+    queueLists = Queue.objects.filter(base_query).values()
+    
     context = {
         'queueLists': queueLists,
-        'hardwareCount':hardwareCount,
-        'softwareCount':softwareCount,
-        'phoneCount':phoneCount,
-        'accountCount':accountCount,
+        'hardwareCount': hardwareCount,
+        'softwareCount': softwareCount,
+        'phoneCount': phoneCount,
+        'accountCount': accountCount,
+        'profile': request.user.profile,
+        'technician': technician,
+        'status': status,
+        'type': type_filter
     }
     return render(request, 'accounts/dashboard.html', context)
+
+@login_required(login_url='login')
+def profile(request):
+    profile = request.user.profile
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Profile updated successfully')
+            return redirect('dashboard')
+    else:
+        profile_form = UserProfileForm(instance=profile)
+    
+    return render(request, 'accounts/profile.html', {
+        'profile_form': profile_form,
+        'profile': profile
+    })
 
     
