@@ -146,6 +146,19 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Add this for production media file serving
+if not DEBUG:
+    # Serve media files in production
+    from django.conf.urls.static import static
+    from django.urls import re_path
+    from django.views.static import serve
+
+    urlpatterns = [
+        re_path(r'^media/(?P<path>.*)$', serve, {
+            'document_root': MEDIA_ROOT
+        }),
+    ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
