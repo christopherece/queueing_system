@@ -13,7 +13,7 @@ def index(request):
     return render(request, 'dashboard/index.html', context)
 
 def monitor(request):
-    queueLists = Queue.objects.filter(status='Active')
+    queueLists = Queue.objects.all()
     queue_id = queueLists.aggregate(Min('queue_id'))['queue_id__min']
     context = {
         'queueLists': queueLists,

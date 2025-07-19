@@ -73,8 +73,84 @@
       background: white;
       border-radius: 1.5rem;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
       transition: transform 0.3s ease;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    .queue-section {
+      padding: 2rem;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .queue-section h4 {
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .table {
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 0;
+    }
+
+    .table th {
+      background-color: #f8f9fa;
+      border-bottom: 2px solid #dee2e6;
+      font-weight: 600;
+      color: #333;
+      padding: 1rem;
+    }
+
+    .table td {
+      padding: 1rem;
+      vertical-align: middle;
+    }
+
+    .badge {
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+    }
+
+    .current-queue {
+      padding: 2rem;
+      background: var(--bg-overlay);
+      border-radius: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .serving-number {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .serving-number h2 {
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .serving-number h1 {
+      color: var(--accent-color);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .status-badge {
+      margin-bottom: 1.5rem;
+    }
+
+    .status-badge .badge {
+      background-color: var(--primary-color);
+      color: white;
     }
 
     .main-card:hover {
@@ -283,13 +359,13 @@
     <div class="card">
       <div class="card-body">
         <div class="row">
-          <div class="col-md-8 queue-section">
-            <h4 class="mb-4">Queue List</h4>
+          <div class="col-md-7 queue-section">
+            <h4>Queue List</h4>
             <div class="table-responsive">
               <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th width="10%" class="text-center">Queue #</th>
+                    <th width="15%" class="text-center">Queue #</th>
                     <th>Type</th>
                     <th>Description</th>
                   </tr>
@@ -313,9 +389,9 @@
             </div>
           </div>
 
-          <div class="col-md-4 queue-section">
+          <div class="col-md-5 queue-section">
             <div class="current-queue">
-              <h4 class="mb-3">Current Queue</h4>
+              <h4>Current Queue</h4>
               <div class="serving-number">
                 <h2 class="text-primary mb-1">Serving No:</h2>
                 <h1 class="display-1 mb-0">
